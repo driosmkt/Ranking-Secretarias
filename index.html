@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simão na Rede Digital - Corrida Digital</title>
+    <title>Dashboard Interativo - Corrida Digital</title>
     <style>
         /* --- ESTILOS GERAIS (CSS) --- */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
@@ -11,10 +11,11 @@
         :root {
             --cor-fundo: #0f1018;
             --cor-card: #1c1d2b;
+            --cor-card-secundario: #212232;
             --cor-texto-principal: #ffffff;
             --cor-texto-secundario: #a7a7a7;
             --cor-amarelo: #f9c74f;
-            --cor-borda: #f9c74f;
+            --cor-azul: #4a90e2;
         }
 
         body {
@@ -28,144 +29,95 @@
             align-items: center;
         }
 
-        h1, h2 {
+        h1, h2, h3 {
             text-align: center;
         }
 
-        h1 {
-            color: var(--cor-amarelo);
-            font-size: 2.5em;
-            letter-spacing: 2px;
-            margin-bottom: 0;
-        }
-        
-        h2 {
-            font-size: 1.8em;
-            margin-top: 5px;
-        }
+        h1 { color: var(--cor-amarelo); font-size: 2.5em; letter-spacing: 2px; margin-bottom: 0; }
+        h2 { font-size: 1.8em; margin-top: 5px; }
 
-        /* --- PÓDIO --- */
-        .podium-container {
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            gap: 20px;
-            flex-wrap: wrap;
-            width: 100%;
-            max-width: 1200px;
-            margin-top: 30px;
-        }
-
-        .podium-card {
+        /* --- ÁREA DE ATUALIZAÇÃO --- */
+        .update-container {
             background-color: var(--cor-card);
-            border: 2px solid transparent;
             border-radius: 10px;
             padding: 25px;
-            text-align: center;
-            width: 280px;
+            margin-top: 30px;
+            width: 100%;
+            max-width: 800px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            transition: transform 0.3s ease, border-color 0.3s ease;
         }
 
-        .podium-card:hover {
-            transform: translateY(-10px);
-        }
-
-        .podium-card h3 {
-            margin: 0;
-            font-size: 1.5em;
-            color: var(--cor-texto-principal);
-        }
-
-        .podium-card .posicao {
-            font-size: 3em;
-            font-weight: 700;
+        .update-container h3 {
+            margin-top: 0;
             color: var(--cor-amarelo);
         }
-
-        .podium-card-1 {
-            order: 2;
-            height: 280px;
-            border-color: #ffd700; /* Ouro */
-        }
-
-        .podium-card-2 {
-            order: 1;
-            height: 250px;
-             border-color: #c0c0c0; /* Prata */
-        }
-
-        .podium-card-3 {
-            order: 3;
-            height: 250px;
-            border-color: #cd7f32; /* Bronze */
-        }
         
+        #update-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            align-items: flex-end;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 8px;
+            font-size: 0.9em;
+            color: var(--cor-texto-secundario);
+        }
+
+        .form-group select, .form-group input {
+            background-color: var(--cor-card-secundario);
+            color: var(--cor-texto-principal);
+            border: 1px solid #444;
+            border-radius: 5px;
+            padding: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1em;
+        }
+
+        #update-button {
+            background-color: var(--cor-azul);
+            color: var(--cor-texto-principal);
+            border: none;
+            border-radius: 5px;
+            padding: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            height: 45px;
+        }
+        #update-button:hover {
+            background-color: #357abd;
+        }
+
+        /* --- PÓDIO E RANKING (Mesmos estilos de antes) --- */
+        .podium-container { display: flex; justify-content: center; align-items: flex-end; gap: 20px; flex-wrap: wrap; width: 100%; max-width: 1200px; margin-top: 30px; }
+        .podium-card { background-color: var(--cor-card); border: 2px solid transparent; border-radius: 10px; padding: 25px; text-align: center; width: 280px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); transition: transform 0.3s ease, border-color 0.3s ease; }
+        .podium-card:hover { transform: translateY(-10px); }
+        .podium-card h3 { margin: 0; font-size: 1.2em; color: var(--cor-texto-principal); height: 40px;}
+        .podium-card .posicao { font-size: 3em; font-weight: 700; }
+        .podium-card-1 { order: 2; height: 280px; border-color: #ffd700; }
+        .podium-card-2 { order: 1; height: 250px; border-color: #c0c0c0; }
+        .podium-card-3 { order: 3; height: 250px; border-color: #cd7f32; }
         .podium-card-1 .posicao { color: #ffd700; }
         .podium-card-2 .posicao { color: #c0c0c0; }
         .podium-card-3 .posicao { color: #cd7f32; }
-
-
-        .podium-data {
-            margin-top: 20px;
-            text-align: left;
-            font-size: 0.9em;
-        }
-
-        .podium-data p {
-            display: flex;
-            justify-content: space-between;
-            margin: 10px 0;
-        }
-        
-        .podium-data span {
-            font-weight: 600;
-        }
-
-        /* --- RANKING GERAL --- */
-        .ranking-container {
-            width: 100%;
-            max-width: 1000px;
-            margin-top: 50px;
-        }
-
-        .ranking-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            background-color: var(--cor-card);
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .ranking-table th, .ranking-table td {
-            padding: 15px;
-            text-align: left;
-        }
-
-        .ranking-table thead {
-            background-color: #2a2c3d;
-            color: var(--cor-amarelo);
-            font-weight: 600;
-        }
-
-        .ranking-table tbody tr {
-            border-bottom: 1px solid #2a2c3d;
-        }
-        
-        .ranking-table tbody tr:last-child {
-            border-bottom: none;
-        }
-
-        .ranking-table tbody tr:nth-child(even) {
-            background-color: #212232;
-        }
-
-        .ranking-table .pos-cell {
-            font-weight: 700;
-            color: var(--cor-amarelo);
-            text-align: center;
-        }
+        .podium-data { margin-top: 20px; text-align: left; font-size: 0.9em; }
+        .podium-data p { display: flex; justify-content: space-between; margin: 10px 0; }
+        .podium-data span { font-weight: 600; }
+        .ranking-container { width: 100%; max-width: 1000px; margin-top: 50px; }
+        .ranking-table { width: 100%; border-collapse: collapse; margin-top: 20px; background-color: var(--cor-card); border-radius: 10px; overflow: hidden; }
+        .ranking-table th, .ranking-table td { padding: 15px; text-align: left; }
+        .ranking-table thead { background-color: #2a2c3d; color: var(--cor-amarelo); font-weight: 600; }
+        .ranking-table tbody tr { border-bottom: 1px solid #2a2c3d; }
+        .ranking-table tbody tr:last-child { border-bottom: none; }
+        .ranking-table tbody tr:nth-child(even) { background-color: var(--cor-card-secundario); }
+        .ranking-table .pos-cell { font-weight: 700; color: var(--cor-amarelo); text-align: center; }
     </style>
 </head>
 <body>
@@ -175,12 +127,33 @@
         <h2>CORRIDA DIGITAL</h2>
     </header>
 
+    <section class="update-container">
+        <h3>Área de Atualização de Dados</h3>
+        <form id="update-form" onsubmit="return false;">
+            <div class="form-group" style="grid-column: 1 / -1;">
+                <label for="secretaria-select">Selecione a Secretaria</label>
+                <select id="secretaria-select"></select>
+            </div>
+            <div class="form-group">
+                <label for="cadastros-input">Cadastros</label>
+                <input type="number" id="cadastros-input" min="0" required>
+            </div>
+            <div class="form-group">
+                <label for="cliques-input">Cliques no Link</label>
+                <input type="number" id="cliques-input" min="0" required>
+            </div>
+            <div class="form-group">
+                <label for="membros-input">Membros no Grupo</label>
+                <input type="number" id="membros-input" min="0" required>
+            </div>
+            <button type="submit" id="update-button">Atualizar Ranking</button>
+        </form>
+    </section>
+
     <main>
         <section class="podium-section">
             <h2>🏆 Pódio das Secretarias 🏆</h2>
-            <div id="podium-container" class="podium-container">
-                <!-- O Pódio será gerado pelo JavaScript -->
-            </div>
+            <div id="podium-container" class="podium-container"></div>
         </section>
 
         <section class="ranking-container">
@@ -195,21 +168,14 @@
                         <th style="width: 15%;">Membros</th>
                     </tr>
                 </thead>
-                <tbody id="ranking-body">
-                    <!-- O restante do ranking será gerado pelo JavaScript -->
-                </tbody>
+                <tbody id="ranking-body"></tbody>
             </table>
         </section>
     </main>
     
     <script>
-    // --- DADOS E LÓGICA (JAVASCRIPT) ---
-
-    // =================================================================
-    //  ATUALIZE OS DADOS DAS SECRETARIAS AQUI
-    //  A página irá se reorganizar sozinha ao recarregar.
-    // =================================================================
-    const dadosSecretarias = [
+    // --- DADOS INICIAIS ---
+    let dadosSecretarias = [
         { nome: "Saúde", cadastros: 51, cliques: 580, membros: 240 },
         { nome: "Educação, Cultura e Esporte", cadastros: 48, cliques: 510, membros: 220 },
         { nome: "Desenvolvimento Econômico, Turismo e Inovação", cadastros: 45, cliques: 490, membros: 205 },
@@ -232,33 +198,32 @@
         { nome: "Controladoria-Geral do Município", cadastros: 8, cliques: 100, membros: 42 }
     ];
 
-    // --- LÓGICA DE CLASSIFICAÇÃO ---
-    // Critério: 1º Cadastros, 2º Cliques (desempate), 3º Membros (desempate)
-    dadosSecretarias.sort((a, b) => {
-        if (b.cadastros !== a.cadastros) {
-            return b.cadastros - a.cadastros;
-        }
-        if (b.cliques !== a.cliques) {
-            return b.cliques - a.cliques;
-        }
-        return b.membros - a.membros;
-    });
+    // --- ELEMENTOS DO DOM ---
+    const form = document.getElementById('update-form');
+    const select = document.getElementById('secretaria-select');
+    const cadastrosInput = document.getElementById('cadastros-input');
+    const cliquesInput = document.getElementById('cliques-input');
+    const membrosInput = document.getElementById('membros-input');
+    const podiumContainer = document.getElementById('podium-container');
+    const rankingBody = document.getElementById('ranking-body');
 
-    // --- FUNÇÃO PARA GERAR O PÓDIO ---
-    function gerarPodio() {
-        const podiumContainer = document.getElementById('podium-container');
+    // --- FUNÇÕES DE RENDERIZAÇÃO ---
+    function sortAndRank() {
+        dadosSecretarias.sort((a, b) => {
+            if (b.cadastros !== a.cadastros) return b.cadastros - a.cadastros;
+            if (b.cliques !== a.cliques) return b.cliques - a.cliques;
+            return b.membros - a.membros;
+        });
+    }
+
+    function renderPodium() {
+        podiumContainer.innerHTML = '';
         const top3 = dadosSecretarias.slice(0, 3);
-        const medalhas = ['🥇', '🥈', '🥉'];
-
         top3.forEach((secretaria, index) => {
             const card = document.createElement('div');
             card.className = `podium-card podium-card-${index + 1}`;
-            
-            // O emoji da medalha já está no título da seção, usamos a posição.
-            const posicao = (index + 1) + 'º';
-            
             card.innerHTML = `
-                <span class="posicao">${posicao}</span>
+                <span class="posicao">${index + 1}º</span>
                 <h3>${secretaria.nome}</h3>
                 <div class="podium-data">
                     <p>Cadastros: <span>${secretaria.cadastros}</span></p>
@@ -270,16 +235,12 @@
         });
     }
 
-    // --- FUNÇÃO PARA GERAR O RANKING GERAL ---
-    function gerarRankingGeral() {
-        const rankingBody = document.getElementById('ranking-body');
-        // Começa do 4º colocado (índice 3) em diante
+    function renderRankingTable() {
+        rankingBody.innerHTML = '';
         const restoDoRanking = dadosSecretarias.slice(3);
-
         restoDoRanking.forEach((secretaria, index) => {
-            const posicao = index + 4; // Posição real no ranking
+            const posicao = index + 4;
             const linha = document.createElement('tr');
-            
             linha.innerHTML = `
                 <td class="pos-cell">${posicao}º</td>
                 <td>${secretaria.nome}</td>
@@ -291,22 +252,55 @@
         });
     }
 
-    // --- EXECUTAR AS FUNÇÕES QUANDO A PÁGINA CARREGAR ---
-    window.onload = () => {
-        gerarPodio();
-        gerarRankingGeral();
-    };
+    function updateDisplay() {
+        sortAndRank();
+        renderPodium();
+        renderRankingTable();
+    }
+    
+    // --- FUNÇÕES DO FORMULÁRIO ---
+    function populateSelect() {
+        dadosSecretarias.forEach(secretaria => {
+            const option = document.createElement('option');
+            option.value = secretaria.nome;
+            option.textContent = secretaria.nome;
+            select.appendChild(option);
+        });
+    }
 
+    function fillFormWithSelectedData() {
+        const selectedName = select.value;
+        const secretariaData = dadosSecretarias.find(s => s.nome === selectedName);
+        if (secretariaData) {
+            cadastrosInput.value = secretariaData.cadastros;
+            cliquesInput.value = secretariaData.cliques;
+            membrosInput.value = secretariaData.membros;
+        }
+    }
+
+    function handleFormSubmit() {
+        const selectedName = select.value;
+        const secretariaIndex = dadosSecretarias.findIndex(s => s.nome === selectedName);
+        
+        if (secretariaIndex > -1) {
+            dadosSecretarias[secretariaIndex].cadastros = parseInt(cadastrosInput.value) || 0;
+            dadosSecretarias[secretariaIndex].cliques = parseInt(cliquesInput.value) || 0;
+            dadosSecretarias[secretariaIndex].membros = parseInt(membrosInput.value) || 0;
+
+            updateDisplay();
+            alert(`Dados da secretaria "${selectedName}" atualizados com sucesso!`);
+        }
+    }
+
+    // --- INICIALIZAÇÃO E EVENTOS ---
+    window.onload = () => {
+        populateSelect();
+        fillFormWithSelectedData();
+        updateDisplay();
+        
+        select.addEventListener('change', fillFormWithSelectedData);
+        form.addEventListener('submit', handleFormSubmit);
+    };
     </script>
 </body>
-</html>```
-
-### **Como Atualizar os Dados**
-
-1.  Abra o arquivo `ranking.html` no seu editor de texto.
-2.  Vá até a seção do **JavaScript**, na parte indicada por `// ATUALIZE OS DADOS DAS SECRETARIAS AQUI`.
-3.  Modifique os números de `cadastros`, `cliques` ou `membros` para qualquer secretaria.
-4.  Salve o arquivo.
-5.  Recarregue a página no seu navegador (pressione F5 ou use o botão de recarregar).
-
-Você verá que o pódio e o ranking geral se ajustarão automaticamente aos novos dados, reclassificando as secretarias conforme o critério definido (primeiro por cadastros, depois por cliques e membros para desempate).
+</html>
