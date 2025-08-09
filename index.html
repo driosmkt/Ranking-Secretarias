@@ -1,117 +1,312 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simão na Rede Digital - Ranking</title>
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>Simão na Rede Digital - Corrida Digital</title>
+    <style>
+        /* --- ESTILOS GERAIS (CSS) --- */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
-    <!-- CSS Externo -->
-   <link rel="stylesheet" href="style.css?v=1.2">
+        :root {
+            --cor-fundo: #0f1018;
+            --cor-card: #1c1d2b;
+            --cor-texto-principal: #ffffff;
+            --cor-texto-secundario: #a7a7a7;
+            --cor-amarelo: #f9c74f;
+            --cor-borda: #f9c74f;
+        }
 
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CHWE9QKPGJ"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-CHWE9QKPGJ');
-    </script>
+        body {
+            background-color: var(--cor-fundo);
+            color: var(--cor-texto-principal);
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1, h2 {
+            text-align: center;
+        }
+
+        h1 {
+            color: var(--cor-amarelo);
+            font-size: 2.5em;
+            letter-spacing: 2px;
+            margin-bottom: 0;
+        }
+        
+        h2 {
+            font-size: 1.8em;
+            margin-top: 5px;
+        }
+
+        /* --- PÓDIO --- */
+        .podium-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 20px;
+            flex-wrap: wrap;
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 30px;
+        }
+
+        .podium-card {
+            background-color: var(--cor-card);
+            border: 2px solid transparent;
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            width: 280px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .podium-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .podium-card h3 {
+            margin: 0;
+            font-size: 1.5em;
+            color: var(--cor-texto-principal);
+        }
+
+        .podium-card .posicao {
+            font-size: 3em;
+            font-weight: 700;
+            color: var(--cor-amarelo);
+        }
+
+        .podium-card-1 {
+            order: 2;
+            height: 280px;
+            border-color: #ffd700; /* Ouro */
+        }
+
+        .podium-card-2 {
+            order: 1;
+            height: 250px;
+             border-color: #c0c0c0; /* Prata */
+        }
+
+        .podium-card-3 {
+            order: 3;
+            height: 250px;
+            border-color: #cd7f32; /* Bronze */
+        }
+        
+        .podium-card-1 .posicao { color: #ffd700; }
+        .podium-card-2 .posicao { color: #c0c0c0; }
+        .podium-card-3 .posicao { color: #cd7f32; }
+
+
+        .podium-data {
+            margin-top: 20px;
+            text-align: left;
+            font-size: 0.9em;
+        }
+
+        .podium-data p {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+        }
+        
+        .podium-data span {
+            font-weight: 600;
+        }
+
+        /* --- RANKING GERAL --- */
+        .ranking-container {
+            width: 100%;
+            max-width: 1000px;
+            margin-top: 50px;
+        }
+
+        .ranking-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: var(--cor-card);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .ranking-table th, .ranking-table td {
+            padding: 15px;
+            text-align: left;
+        }
+
+        .ranking-table thead {
+            background-color: #2a2c3d;
+            color: var(--cor-amarelo);
+            font-weight: 600;
+        }
+
+        .ranking-table tbody tr {
+            border-bottom: 1px solid #2a2c3d;
+        }
+        
+        .ranking-table tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        .ranking-table tbody tr:nth-child(even) {
+            background-color: #212232;
+        }
+
+        .ranking-table .pos-cell {
+            font-weight: 700;
+            color: var(--cor-amarelo);
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
 
-    <!-- TÍTULO PRINCIPAL COM LOGO -->
-    <div class="main-title-container">
-        <img src="logo.png" alt="Logo Simão na Rede Digital" class="main-logo">
-        <h1>Simão na Rede Digital</h1>
-    </div>
-
-    <!-- Título da página de ranking -->
-    <header class="container">
-        <h2>Corrida Digital</h2>
+    <header>
+        <h1>SIMÃO NA REDE DIGITAL</h1>
+        <h2>CORRIDA DIGITAL</h2>
     </header>
 
-    <main class="container">
-        <!-- Seção do Pódio para os 3 primeiros -->
+    <main>
         <section class="podium-section">
             <h2>🏆 Pódio das Secretarias 🏆</h2>
-            <div class="podium-grid" id="podium-container">
-                <!-- Cards do pódio serão inseridos aqui via JavaScript -->
+            <div id="podium-container" class="podium-container">
+                <!-- O Pódio será gerado pelo JavaScript -->
             </div>
         </section>
 
-        <!-- Seção do Ranking Geral -->
-        <section class="general-ranking-section">
+        <section class="ranking-container">
             <h2>Ranking Geral</h2>
-            <div class="table-container">
-                <table id="ranking-table">
-                    <thead>
-                        <tr>
-                            <th style="text-align: center;">Pos.</th>
-                            <th>Secretaria</th>
-                            <th>Cadastros</th>
-                            <th>Cliques</th>
-                            <th>Membros</th>
-                        </tr>
-                    </thead>
-                    <tbody id="general-ranking-body">
-                        <!-- Linhas do ranking geral serão inseridas aqui via JavaScript -->
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
-        <!-- Seção de Metas Principais -->
-        <section class="goals-section">
-            <h2>Metas do Projeto</h2>
-            <div class="goals-grid">
-                <!-- Meta de Servidores Cadastrados -->
-                <div class="goal-card">
-                    <img src="https://www.gstatic.com/images/icons/material/system_gm/2x/group_gm_blue_24dp.png" alt="Ícone de Pessoas" class="goal-icon">
-                    <h3>Servidores Cadastrados</h3>
-                    <div class="goal-progress-container">
-                        <div class="goal-progress-bar" id="servers-progress-bar"></div>
-                    </div>
-                    <div class="goal-details">
-                        <span id="current-servers">0</span> / <span>1.000</span>
-                    </div>
-                    <p class="goal-percentage" id="servers-percentage">0%</p>
-                </div>
-
-                <!-- Meta de Seguidores -->
-                <div class="goal-card">
-                    <img src="https://www.gstatic.com/images/icons/material/system/2x/camera_alt_gm_blue_24dp.png" alt="Ícone do Instagram" class="goal-icon">
-                    <h3>Seguidores no Instagram</h3>
-                    <div class="goal-progress-container">
-                        <div class="goal-progress-bar" id="followers-progress-bar"></div>
-                    </div>
-                    <div class="goal-details">
-                        <span id="current-followers">0</span> / <span>150.000</span>
-                    </div>
-                    <p class="goal-percentage" id="followers-percentage">0%</p>
-                </div>
-            </div>
+            <table class="ranking-table">
+                <thead>
+                    <tr>
+                        <th style="width: 10%; text-align: center;">Pos.</th>
+                        <th style="width: 50%;">Secretaria</th>
+                        <th style="width: 15%;">Cadastros</th>
+                        <th style="width: 15%;">Cliques</th>
+                        <th style="width: 15%;">Membros</th>
+                    </tr>
+                </thead>
+                <tbody id="ranking-body">
+                    <!-- O restante do ranking será gerado pelo JavaScript -->
+                </tbody>
+            </table>
         </section>
     </main>
+    
+    <script>
+    // --- DADOS E LÓGICA (JAVASCRIPT) ---
 
-    <!-- Rodapé -->
-    <footer>
-        <div class="footer-logo">
-            <img src="logo.png" alt="Logo Simão na Rede Digital">
-            <span>Simão na Rede Digital</span>
-        </div>
-        <div class="footer-credits">
-            <p>Núcleo Digital da Secretaria de Comunicação:</p>
-            <p class="names">Raphael Rosendo e Douglas Rios</p>
-        </div>
-        <p class="footer-copyright">&copy; 2025 Prefeitura de Petrolina – Secretaria de Comunicação</p>
-    </footer>
+    // =================================================================
+    //  ATUALIZE OS DADOS DAS SECRETARIAS AQUI
+    //  A página irá se reorganizar sozinha ao recarregar.
+    // =================================================================
+    const dadosSecretarias = [
+        { nome: "Saúde", cadastros: 51, cliques: 580, membros: 240 },
+        { nome: "Educação, Cultura e Esporte", cadastros: 48, cliques: 510, membros: 220 },
+        { nome: "Desenvolvimento Econômico, Turismo e Inovação", cadastros: 45, cliques: 490, membros: 205 },
+        { nome: "Infraestrutura e Mobilidade", cadastros: 39, cliques: 410, membros: 185 },
+        { nome: "Assistência Social e Combate à Fome", cadastros: 37, cliques: 390, membros: 170 },
+        { nome: "Comunicação", cadastros: 35, cliques: 450, membros: 165 },
+        { nome: "Desenvolvimento Rural", cadastros: 26, cliques: 320, membros: 150 },
+        { nome: "Serviços Públicos e Defesa Civil", cadastros: 25, cliques: 300, membros: 135 },
+        { nome: "Governo", cadastros: 24, cliques: 280, membros: 120 },
+        { nome: "Desenvolvimento Urbano, Habitação e Sustentabilidade", cadastros: 23, cliques: 250, membros: 110 },
+        { nome: "Casa Civil", cadastros: 22, cliques: 240, membros: 100 },
+        { nome: "Planejamento, Gestão e Finanças", cadastros: 21, cliques: 210, membros: 90 },
+        { nome: "Segurança Pública", cadastros: 20, cliques: 190, membros: 85 },
+        { nome: "Ammpla", cadastros: 19, cliques: 170, membros: 75 },
+        { nome: "Licitações e Contratos", cadastros: 18, cliques: 150, membros: 65 },
+        { nome: "Receitas Municipais", cadastros: 17, cliques: 140, membros: 60 },
+        { nome: "Autarquia 1", cadastros: 16, cliques: 130, membros: 55 },
+        { nome: "Autarquia 2", cadastros: 15, cliques: 120, membros: 50 },
+        { nome: "Procuradoria-Geral do Município", cadastros: 11, cliques: 110, membros: 48 },
+        { nome: "Controladoria-Geral do Município", cadastros: 8, cliques: 100, membros: 42 }
+    ];
 
-    <!-- JavaScript Externo -->
-    <script src="script.js"></script>
+    // --- LÓGICA DE CLASSIFICAÇÃO ---
+    // Critério: 1º Cadastros, 2º Cliques (desempate), 3º Membros (desempate)
+    dadosSecretarias.sort((a, b) => {
+        if (b.cadastros !== a.cadastros) {
+            return b.cadastros - a.cadastros;
+        }
+        if (b.cliques !== a.cliques) {
+            return b.cliques - a.cliques;
+        }
+        return b.membros - a.membros;
+    });
+
+    // --- FUNÇÃO PARA GERAR O PÓDIO ---
+    function gerarPodio() {
+        const podiumContainer = document.getElementById('podium-container');
+        const top3 = dadosSecretarias.slice(0, 3);
+        const medalhas = ['🥇', '🥈', '🥉'];
+
+        top3.forEach((secretaria, index) => {
+            const card = document.createElement('div');
+            card.className = `podium-card podium-card-${index + 1}`;
+            
+            // O emoji da medalha já está no título da seção, usamos a posição.
+            const posicao = (index + 1) + 'º';
+            
+            card.innerHTML = `
+                <span class="posicao">${posicao}</span>
+                <h3>${secretaria.nome}</h3>
+                <div class="podium-data">
+                    <p>Cadastros: <span>${secretaria.cadastros}</span></p>
+                    <p>Cliques no Link: <span>${secretaria.cliques}</span></p>
+                    <p>Membros no Grupo: <span>${secretaria.membros}</span></p>
+                </div>
+            `;
+            podiumContainer.appendChild(card);
+        });
+    }
+
+    // --- FUNÇÃO PARA GERAR O RANKING GERAL ---
+    function gerarRankingGeral() {
+        const rankingBody = document.getElementById('ranking-body');
+        // Começa do 4º colocado (índice 3) em diante
+        const restoDoRanking = dadosSecretarias.slice(3);
+
+        restoDoRanking.forEach((secretaria, index) => {
+            const posicao = index + 4; // Posição real no ranking
+            const linha = document.createElement('tr');
+            
+            linha.innerHTML = `
+                <td class="pos-cell">${posicao}º</td>
+                <td>${secretaria.nome}</td>
+                <td>${secretaria.cadastros}</td>
+                <td>${secretaria.cliques}</td>
+                <td>${secretaria.membros}</td>
+            `;
+            rankingBody.appendChild(linha);
+        });
+    }
+
+    // --- EXECUTAR AS FUNÇÕES QUANDO A PÁGINA CARREGAR ---
+    window.onload = () => {
+        gerarPodio();
+        gerarRankingGeral();
+    };
+
+    </script>
 </body>
-</html>
+</html>```
+
+### **Como Atualizar os Dados**
+
+1.  Abra o arquivo `ranking.html` no seu editor de texto.
+2.  Vá até a seção do **JavaScript**, na parte indicada por `// ATUALIZE OS DADOS DAS SECRETARIAS AQUI`.
+3.  Modifique os números de `cadastros`, `cliques` ou `membros` para qualquer secretaria.
+4.  Salve o arquivo.
+5.  Recarregue a página no seu navegador (pressione F5 ou use o botão de recarregar).
+
+Você verá que o pódio e o ranking geral se ajustarão automaticamente aos novos dados, reclassificando as secretarias conforme o critério definido (primeiro por cadastros, depois por cliques e membros para desempate).
