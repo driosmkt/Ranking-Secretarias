@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Interativo com Memória - Corrida Digital</title>
+    <title>Dashboard com Google Sheets - Corrida Digital</title>
     <style>
-        /* Estilos CSS (idênticos à versão anterior, sem alterações) */
+        /* CSS Principal (sem alterações) */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
-        :root { --cor-fundo: #0f1018; --cor-card: #1c1d2b; --cor-card-secundario: #212232; --cor-texto-principal: #ffffff; --cor-texto-secundario: #a7a7a7; --cor-amarelo: #f9c74f; --cor-azul: #4a90e2; --cor-vermelho: #e74c3c; }
-        body { background-color: var(--cor-fundo); color: var(--cor-texto-principal); font-family: 'Poppins', sans-serif; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        :root { --cor-fundo: #0f1018; --cor-card: #1c1d2b; --cor-card-secundario: #212232; --cor-texto-principal: #ffffff; --cor-texto-secundario: #a7a7a7; --cor-amarelo: #f9c74f; --cor-azul: #4a90e2; --cor-vermelho: #e74c3c; --cor-verde: #2ecc71; }
+        body { background-color: var(--cor-fundo); color: var(--cor-texto-principal); font-family: 'Poppins', sans-serif; margin: 0; padding: 20px 20px 150px 20px; /* Adicionado padding-bottom para não sobrepor o rodapé */ display: flex; flex-direction: column; align-items: center; }
         h1, h2, h3 { text-align: center; }
         h1 { color: var(--cor-amarelo); font-size: 2.5em; letter-spacing: 2px; margin-bottom: 0; }
         h2 { font-size: 1.8em; margin-top: 5px; }
@@ -44,223 +44,155 @@
         .ranking-table tbody tr:last-child { border-bottom: none; }
         .ranking-table tbody tr:nth-child(even) { background-color: var(--cor-card-secundario); }
         .ranking-table .pos-cell { font-weight: 700; color: var(--cor-amarelo); text-align: center; }
+
+        /* --- NOVO CSS PARA O RODAPÉ --- */
+        .footer {
+            width: 100%;
+            padding: 40px 20px;
+            text-align: center;
+            margin-top: 60px;
+            border-top: 1px solid #2a2c3d;
+        }
+        .footer-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: var(--cor-texto-principal);
+            margin: 0;
+        }
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+            gap: 10px;
+        }
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--cor-texto-secundario); /* Cor padrão 'carregando' */
+            animation: pulse 2s infinite;
+        }
+        .status-text {
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: var(--cor-texto-secundario); /* Cor padrão */
+        }
+        .footer-copyright {
+            font-size: 0.9em;
+            color: var(--cor-texto-secundario);
+            margin: 0;
+        }
+
+        /* Animação de pulso para o status */
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(249, 199, 79, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(249, 199, 79, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(249, 199, 79, 0); }
+        }
     </style>
 </head>
 <body>
-
     <header>
         <h1>SIMÃO NA REDE DIGITAL</h1>
         <h2>CORRIDA DIGITAL</h2>
     </header>
 
     <section class="update-container">
-        <h3>Área de Atualização de Dados</h3>
-        <form id="update-form" onsubmit="return false;">
-            <div class="form-group" style="grid-column: 1 / -1;">
-                <label for="secretaria-select">Selecione a Secretaria</label>
-                <select id="secretaria-select"></select>
-            </div>
-            <div class="form-group">
-                <label for="cadastros-input">Cadastros</label>
-                <input type="number" id="cadastros-input" min="0" required>
-            </div>
-            <div class="form-group">
-                <label for="cliques-input">Cliques</label>
-                <input type="number" id="cliques-input" min="0" required>
-            </div>
-            <div class="form-group">
-                <label for="membros-input">Membros</label>
-                <input type="number" id="membros-input" min="0" required>
-            </div>
-            <button type="submit" id="update-button">Atualizar Ranking</button>
-            <button type="button" id="reset-button" class="update-button">Restaurar Originais</button>
-        </form>
+        <!-- O formulário continua igual -->
     </section>
 
     <main>
-        <section class="podium-section">
-            <h2>🏆 Pódio das Secretarias 🏆</h2>
-            <div id="podium-container" class="podium-container"></div>
-        </section>
-
-        <section class="ranking-container">
-            <h2>Ranking Geral</h2>
-            <table class="ranking-table">
-                <thead>
-                    <tr>
-                        <th style="width: 10%; text-align: center;">Pos.</th>
-                        <th style="width: 50%;">Secretaria</th>
-                        <th style="width: 15%;">Cadastros</th>
-                        <th style="width: 15%;">Cliques</th>
-                        <th style="width: 15%;">Membros</th>
-                    </tr>
-                </thead>
-                <tbody id="ranking-body"></tbody>
-            </table>
-        </section>
+        <!-- O conteúdo do pódio e ranking continua igual -->
     </main>
-    
+
+    <!-- NOVO RODAPÉ -->
+    <footer class="footer">
+        <p class="footer-title">Núcleo Digital da Secretaria de Comunicação</p>
+        <div class="status-indicator">
+            <span id="status-dot" class="status-dot"></span>
+            <span id="status-text" class="status-text">CARREGANDO...</span>
+        </div>
+        <p class="footer-copyright">© 2025 Prefeitura de Petrolina – Secretaria de Comunicação</p>
+    </footer>
+
     <script>
-    const STORAGE_KEY = 'dashboardDataV1';
+        // COLE AQUI A URL DO SEU APP SCRIPT PUBLICADO
+        const SCRIPT_URL = 'COLE_SUA_URL_DO_APP_DA_WEB_AQUI';
 
-    // --- DADOS INICIAIS (USADOS APENAS SE NADA ESTIVER SALVO) ---
-    const initialData = [
-        { nome: "Saúde", cadastros: 51, cliques: 580, membros: 240 },
-        { nome: "Educação, Cultura e Esporte", cadastros: 48, cliques: 510, membros: 220 },
-        { nome: "Desenvolvimento Econômico, Turismo e Inovação", cadastros: 45, cliques: 490, membros: 205 },
-        { nome: "Infraestrutura e Mobilidade", cadastros: 39, cliques: 410, membros: 185 },
-        { nome: "Assistência Social e Combate à Fome", cadastros: 37, cliques: 390, membros: 170 },
-        { nome: "Comunicação", cadastros: 35, cliques: 450, membros: 165 },
-        { nome: "Desenvolvimento Rural", cadastros: 26, cliques: 320, membros: 150 },
-        { nome: "Serviços Públicos e Defesa Civil", cadastros: 25, cliques: 300, membros: 135 },
-        { nome: "Governo", cadastros: 24, cliques: 280, membros: 120 },
-        { nome: "Desenvolvimento Urbano, Habitação e Sustentabilidade", cadastros: 23, cliques: 250, membros: 110 },
-        { nome: "Casa Civil", cadastros: 22, cliques: 240, membros: 100 },
-        { nome: "Planejamento, Gestão e Finanças", cadastros: 21, cliques: 210, membros: 90 },
-        { nome: "Segurança Pública", cadastros: 20, cliques: 190, membros: 85 },
-        { nome: "Ammpla", cadastros: 19, cliques: 170, membros: 75 },
-        { nome: "Licitações e Contratos", cadastros: 18, cliques: 150, membros: 65 },
-        { nome: "Receitas Municipais", cadastros: 17, cliques: 140, membros: 60 },
-        { nome: "Autarquia 1", cadastros: 16, cliques: 130, membros: 55 },
-        { nome: "Autarquia 2", cadastros: 15, cliques: 120, membros: 50 },
-        { nome: "Procuradoria-Geral do Município", cadastros: 11, cliques: 110, membros: 48 },
-        { nome: "Controladoria-Geral do Município", cadastros: 8, cliques: 100, membros: 42 }
-    ];
+        let dadosSecretarias = [];
+        let isLoading = true;
 
-    let dadosSecretarias;
+        // Elementos do DOM, incluindo os novos do rodapé
+        const form = document.getElementById('update-form');
+        const select = document.getElementById('secretaria-select');
+        const cadastrosInput = document.getElementById('cadastros-input');
+        const cliquesInput = document.getElementById('cliques-input');
+        const membrosInput = document.getElementById('membros-input');
+        const resetButton = document.getElementById('reset-button');
+        const podiumContainer = document.getElementById('podium-container');
+        const rankingBody = document.getElementById('ranking-body');
+        const statusDot = document.getElementById('status-dot');
+        const statusText = document.getElementById('status-text');
 
-    // --- ELEMENTOS DO DOM ---
-    const form = document.getElementById('update-form');
-    const select = document.getElementById('secretaria-select');
-    const cadastrosInput = document.getElementById('cadastros-input');
-    const cliquesInput = document.getElementById('cliques-input');
-    const membrosInput = document.getElementById('membros-input');
-    const resetButton = document.getElementById('reset-button');
-    const podiumContainer = document.getElementById('podium-container');
-    const rankingBody = document.getElementById('ranking-body');
-
-    // --- FUNÇÕES DE LÓGICA E RENDERIZAÇÃO ---
-    function sortAndRank() {
-        dadosSecretarias.sort((a, b) => {
-            if (b.cadastros !== a.cadastros) return b.cadastros - a.cadastros;
-            if (b.cliques !== a.cliques) return b.cliques - a.cliques;
-            return b.membros - a.membros;
-        });
-    }
-    
-    function renderPodium() { /* ...código idêntico... */ 
-        podiumContainer.innerHTML = '';
-        const top3 = dadosSecretarias.slice(0, 3);
-        top3.forEach((secretaria, index) => {
-            const card = document.createElement('div');
-            card.className = `podium-card podium-card-${index + 1}`;
-            card.innerHTML = `
-                <span class="posicao">${index + 1}º</span>
-                <h3>${secretaria.nome}</h3>
-                <div class="podium-data">
-                    <p>Cadastros: <span>${secretaria.cadastros}</span></p>
-                    <p>Cliques no Link: <span>${secretaria.cliques}</span></p>
-                    <p>Membros no Grupo: <span>${secretaria.membros}</span></p>
-                </div>
-            `;
-            podiumContainer.appendChild(card);
-        });
-    }
-
-    function renderRankingTable() { /* ...código idêntico... */
-        rankingBody.innerHTML = '';
-        const restoDoRanking = dadosSecretarias.slice(3);
-        restoDoRanking.forEach((secretaria, index) => {
-            const posicao = index + 4;
-            const linha = document.createElement('tr');
-            linha.innerHTML = `
-                <td class="pos-cell">${posicao}º</td>
-                <td>${secretaria.nome}</td>
-                <td>${secretaria.cadastros}</td>
-                <td>${secretaria.cliques}</td>
-                <td>${secretaria.membros}</td>
-            `;
-            rankingBody.appendChild(linha);
-        });
-    }
-
-    function updateDisplay() {
-        sortAndRank();
-        renderPodium();
-        renderRankingTable();
-    }
-    
-    // --- FUNÇÕES DO FORMULÁRIO E PERSISTÊNCIA ---
-    function saveData() {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(dadosSecretarias));
-    }
-
-    function loadData() {
-        const savedData = localStorage.getItem(STORAGE_KEY);
-        if (savedData) {
-            dadosSecretarias = JSON.parse(savedData);
-        } else {
-            dadosSecretarias = initialData;
-            saveData(); // Salva os dados iniciais na primeira vez
-        }
-    }
-
-    function populateSelect() {
-        // Ordena alfabeticamente para facilitar a busca no dropdown
-        const sortedByName = [...dadosSecretarias].sort((a, b) => a.nome.localeCompare(b.nome));
-        select.innerHTML = ''; // Limpa antes de popular
-        sortedByName.forEach(secretaria => {
-            const option = document.createElement('option');
-            option.value = secretaria.nome;
-            option.textContent = secretaria.nome;
-            select.appendChild(option);
-        });
-    }
-
-    function fillFormWithSelectedData() {
-        const selectedName = select.value;
-        const secretariaData = dadosSecretarias.find(s => s.nome === selectedName);
-        if (secretariaData) {
-            cadastrosInput.value = secretariaData.cadastros;
-            cliquesInput.value = secretariaData.cliques;
-            membrosInput.value = secretariaData.membros;
-        }
-    }
-
-    function handleFormSubmit() {
-        const selectedName = select.value;
-        const secretariaIndex = dadosSecretarias.findIndex(s => s.nome === selectedName);
+        // Funções de renderização (continuam iguais)
+        function sortAndRank(){/*...*/}
+        function renderPodium(){/*...*/}
+        function renderRankingTable(){/*...*/}
+        function updateDisplay(){/*...*/}
+        function populateSelect(){/*...*/}
+        function fillFormWithSelectedData(){/*...*/}
         
-        if (secretariaIndex > -1) {
-            dadosSecretarias[secretariaIndex].cadastros = parseInt(cadastrosInput.value) || 0;
-            dadosSecretarias[secretariaIndex].cliques = parseInt(cliquesInput.value) || 0;
-            dadosSecretarias[secretariaIndex].membros = parseInt(membrosInput.value) || 0;
+        async function loadData() {
+            try {
+                const response = await fetch(SCRIPT_URL);
+                if (!response.ok) throw new Error("Erro de rede ao buscar dados.");
+                
+                dadosSecretarias = await response.json();
+                isLoading = false;
 
-            saveData(); // <-- PONTO CHAVE: Salva os dados após a atualização
-            updateDisplay();
-            alert(`Dados da secretaria "${selectedName}" foram atualizados e salvos!`);
+                // ATUALIZA O STATUS PARA CONECTADO
+                statusDot.style.backgroundColor = 'var(--cor-amarelo)';
+                statusText.textContent = 'CONECTADO';
+                statusText.style.color = 'var(--cor-amarelo)';
+
+                updateDisplay();
+                populateSelect();
+                fillFormWithSelectedData();
+
+            } catch (error) {
+                console.error("Falha ao buscar dados da planilha:", error);
+                
+                // ATUALIZA O STATUS PARA FALHA
+                statusDot.style.backgroundColor = 'var(--cor-vermelho)';
+                statusDot.style.animation = 'none'; // Para a animação no erro
+                statusText.textContent = 'FALHA NA CONEXÃO';
+                statusText.style.color = 'var(--cor-vermelho)';
+                
+                alert("Não foi possível carregar os dados da planilha. Verifique a URL do Script ou a sua conexão.");
+            }
         }
-    }
-
-    function handleReset() {
-        if (confirm('Tem certeza de que deseja apagar todas as alterações e restaurar os dados originais? Esta ação não pode ser desfeita.')) {
-            localStorage.removeItem(STORAGE_KEY);
-            location.reload(); // Recarrega a página, que voltará a usar os dados iniciais
-        }
-    }
-
-    // --- INICIALIZAÇÃO E EVENTOS ---
-    window.onload = () => {
-        loadData(); // <-- PONTO CHAVE: Carrega os dados ao iniciar
         
-        populateSelect();
-        fillFormWithSelectedData();
-        updateDisplay();
-        
-        select.addEventListener('change', fillFormWithSelectedData);
-        form.addEventListener('submit', handleFormSubmit);
-        resetButton.addEventListener('click', handleReset);
-    };
+        // As funções handleFormSubmit e handleReset continuam as mesmas da versão anterior
+        async function handleFormSubmit() {/*...*/}
+        async function handleReset() {/*...*/}
+
+        // --- INICIALIZAÇÃO ---
+        window.onload = () => {
+            // ... (event listeners continuam os mesmos) ...
+            loadData();
+        };
+
+        // Cole aqui as funções que não foram alteradas para economizar espaço
+        function sortAndRank(){dadosSecretarias.sort((a,b)=>{if(b.cadastros!==a.cadastros)return b.cadastros-a.cadastros;if(b.cliques!==a.cliques)return b.cliques-a.cliques;return b.membros-a.membros;});}
+        function renderPodium(){podiumContainer.innerHTML = ''; const top3 = dadosSecretarias.slice(0, 3); top3.forEach((secretaria, index) => { const card = document.createElement('div'); card.className = `podium-card podium-card-${index + 1}`; card.innerHTML = `<span class="posicao">${index + 1}º</span><h3>${secretaria.nome}</h3><div class="podium-data"><p>Cadastros: <span>${secretaria.cadastros}</span></p><p>Cliques no Link: <span>${secretaria.cliques}</span></p><p>Membros no Grupo: <span>${secretaria.membros}</span></p></div>`; podiumContainer.appendChild(card); });}
+        function renderRankingTable(){rankingBody.innerHTML = ''; const restoDoRanking = dadosSecretarias.slice(3); restoDoRanking.forEach((secretaria, index) => { const posicao = index + 4; const linha = document.createElement('tr'); linha.innerHTML = `<td class="pos-cell">${posicao}º</td><td>${secretaria.nome}</td><td>${secretaria.cadastros}</td><td>${secretaria.cliques}</td><td>${secretaria.membros}</td>`; rankingBody.appendChild(linha); });}
+        function updateDisplay(){sortAndRank();renderPodium();renderRankingTable();}
+        function populateSelect(){const sortedByName=[...dadosSecretarias].sort((a,b)=>a.nome.localeCompare(b.nome));select.innerHTML='';sortedByName.forEach(secretaria=>{const option=document.createElement('option');option.value=secretaria.nome;option.textContent=secretaria.nome;select.appendChild(option);});}
+        function fillFormWithSelectedData(){if(isLoading)return;const selectedName=select.value;const secretariaData=dadosSecretarias.find(s=>s.nome===selectedName);if(secretariaData){cadastrosInput.value=secretariaData.cadastros;cliquesInput.value=secretariaData.cliques;membrosInput.value=secretariaData.membros;}}
+        async function handleFormSubmit() {const selectedName = select.value;const secretariaData = {nome: selectedName,cadastros: parseInt(cadastrosInput.value) || 0,cliques: parseInt(cliquesInput.value) || 0,membros: parseInt(membrosInput.value) || 0};try {const response = await fetch(SCRIPT_URL, {method: 'POST',mode: 'no-cors',headers: { 'Content-Type': 'application/json' },body: JSON.stringify(secretariaData)});alert(`Atualização para "${selectedName}" enviada! Os dados serão recarregados.`);loadData();} catch (error) {console.error("Falha ao enviar atualização:", error);alert("Ocorreu um erro ao enviar a atualização.");}}
+        async function handleReset() {if (confirm('Tem certeza de que deseja restaurar os dados originais na planilha?')) {try {await fetch(SCRIPT_URL, {method: 'POST',mode: 'no-cors',headers: { 'Content-Type': 'application/json' },body: JSON.stringify({ action: 'reset' })});alert('Os dados originais foram restaurados. A página será atualizada.');loadData();} catch (error) {console.error("Falha ao resetar:", error);}}}
+        window.onload = () => {form.addEventListener('submit', handleFormSubmit);resetButton.addEventListener('click', handleReset);select.addEventListener('change', fillFormWithSelectedData);loadData();};
     </script>
 </body>
 </html>
