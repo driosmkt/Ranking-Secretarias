@@ -8,8 +8,9 @@
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
         :root { --cor-fundo: #0f1018; --cor-card: #1c1d2b; --cor-card-secundario: #212232; --cor-texto-principal: #ffffff; --cor-texto-secundario: #a7a7a7; --cor-amarelo: #f9c74f; --cor-azul: #4a90e2; --cor-vermelho: #e74c3c; }
         body { background-color: var(--cor-fundo); color: var(--cor-texto-principal); font-family: 'Poppins', sans-serif; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        .header-logo { font-size: 2.8em; font-weight: 700; color: var(--cor-amarelo); letter-spacing: 2px; text-align: center; margin-bottom: 0; }
-        .header-subtitle { font-size: 1.8em; font-weight: 600; text-align: center; margin-top: 5px; margin-bottom: 20px; }
+        
+        #logo-principal { display: block; margin: 20px auto 30px auto; max-width: 450px; width: 90%; }
+        
         h2, h3 { text-align: center; }
         h2 { font-size: 1.8em; }
         .update-container { background-color: var(--cor-card); border-radius: 10px; padding: 25px; margin-top: 30px; width: 100%; max-width: 800px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); }
@@ -44,18 +45,53 @@
         .ranking-table tbody tr:last-child { border-bottom: none; }
         .ranking-table tbody tr:nth-child(even) { background-color: var(--cor-card-secundario); }
         .ranking-table .pos-cell { font-weight: 700; color: var(--cor-amarelo); text-align: center; }
+        
+        /* --- NOVO AVISO --- */
+        .warning-box {
+            background-color: rgba(249, 199, 79, 0.1);
+            color: var(--cor-amarelo);
+            border: 1px solid var(--cor-amarelo);
+            padding: 12px;
+            border-radius: 5px;
+            text-align: center;
+            margin: 10px 0 25px 0;
+            font-weight: 500;
+        }
+
+        /* --- NOVO RODAPÉ --- */
         .footer { width: 100%; padding: 40px 20px; text-align: center; margin-top: 60px; border-top: 1px solid #2a2c3d; }
+        .footer-title { font-size: 1.2em; font-weight: 600; color: var(--cor-texto-principal); margin: 0; }
+        .status-indicator { display: flex; align-items: center; justify-content: center; margin: 20px 0; gap: 10px; }
+        .status-dot { width: 12px; height: 12px; border-radius: 50%; background-color: var(--cor-amarelo); animation: pulse 2s infinite; }
+        .status-text { font-weight: 600; letter-spacing: 1px; color: var(--cor-amarelo); }
         .footer-copyright { font-size: 0.9em; color: var(--cor-texto-secundario); margin: 0; }
+        #print-button { background-color: #2a2c3d; color: var(--cor-texto-principal); border: 1px solid var(--cor-texto-secundario); border-radius: 5px; padding: 10px 20px; font-weight: 600; cursor: pointer; transition: background-color 0.3s ease; margin-top: 20px; }
+        #print-button:hover { background-color: #3c3e52; }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(249, 199, 79, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(249, 199, 79, 0); } 100% { box-shadow: 0 0 0 0 rgba(249, 199, 79, 0); } }
+
+        /* --- ESTILOS PARA IMPRESSÃO --- */
+        @media print {
+            body { background-color: #ffffff; color: #000000; padding: 0; margin: 20px; }
+            header, .update-container, .footer, h2:not(.ranking-container h2) { display: none !important; }
+            main { margin-top: 0; }
+            .ranking-container { margin-top: 30px; }
+            .podium-container { min-height: auto; }
+            .podium-card, .ranking-table { border: 1px solid #ccc; box-shadow: none; }
+            .podium-card h3, .podium-data span, .ranking-table .pos-cell { color: #000 !important; }
+            .podium-card-1 { border-color: #a5a5a5; }
+            .podium-card-2 { border-color: #cccccc; }
+            .podium-card-3 { border-color: #e0e0e0; }
+        }
     </style>
 </head>
 <body>
     <header>
-        <h1 class="header-logo">SIMÃO NA REDE DIGITAL</h1>
-        <h2 class="header-subtitle">CORRIDA DIGITAL</h2>
+        <img id="logo-principal" src="Logo-1.png" alt="Logo Simão na Rede Digital">
     </header>
 
     <section class="update-container">
         <h3>Área de Atualização de Dados</h3>
+        <div class="warning-box">⚠️ Após atualizar os dados, salve em PDF.</div>
         <form id="update-form" onsubmit="return false;">
             <div class="form-group" style="grid-column: 1 / -1;">
                 <label for="secretaria-select">Selecione a Secretaria</label>
@@ -116,34 +152,21 @@
     </main>
     
     <footer class="footer">
+        <p class="footer-title">Núcleo Digital da Secretaria de Comunicação</p>
+        <div class="status-indicator">
+            <span class="status-dot"></span>
+            <span class="status-text">CONECTADO</span>
+        </div>
         <p class="footer-copyright">© 2025 Prefeitura de Petrolina – Secretaria de Comunicação</p>
+        <button type="button" id="print-button">Salvar em PDF</button>
     </footer>
 
     <script>
-        const DATA_KEY = 'dashboard_data_secretarias';
-        const HISTORICO_KEY = 'dashboard_historico_secretarias';
+        const DATA_KEY = 'dashboard_data_secretarias_v2'; // Nova chave para evitar conflito com dados antigos
+        const HISTORICO_KEY = 'dashboard_historico_secretarias_v2';
 
         const initialData = [
-            { nome: "Saúde", cadastros: 0, cliques: 0, membros: 0 },
-            { nome: "Educação, Cultura e Esporte", cadastros: 0, cliques: 0, membros: 0 },
-            { nome: "Desenvolvimento Econômico, Turismo e Inovação", cadastros: 0, cliques: 0, membros: 0 },
-            { nome: "Infraestrutura e Mobilidade", cadastros: 0, cliques: 0, membros: 0 },
-            { nome: "Assistência Social e Combate à Fome", cadastros: 0, cliques: 0, membros: 0 },
-            { nome: "Comunicação", cadastros: 0, cliques: 0, membros: 0 },
-            { nome: "Desenvolvimento Rural", cadastros: 0, cliques: 0, membros: 0 },
-            { nome: "Serviços Públicos e Defesa Civil", cadastros: 0, cliques: 0, membros: 0 },
-            { nome: "Governo", cadastros: 0, cliques: 0, membros: 0 },
-            { nome: "Desenvolvimento Urbano, Habitação e Sustentabilidade", cadastros: 0, cliques: 0, membros: 0 },
-            { nome: "Casa Civil", cadastros: 0, cliques: 0, membros: 0 },
-            { nome: "Planejamento, Gestão e Finanças", cadastros: 0, cliques: 0, membros: 0 },
-            { nome: "Segurança Pública", cadastros: 0, cliques: 0, membros: 0 },
-            { nome: "Ammpla", cadastros: 0, cliques: 0, membros: 0 },
-            { nome: "Licitações e Contratos", cadastros: 0, cliques: 0, membros: 0 },
-            { nome: "Receitas Municipais", cadastros: 0, cliques: 0, membros: 0 },
-            { nome: "Autarquia 1", cadastros: 0, cliques: 0, membros: 0 },
-            { nome: "Autarquia 2", cadastros: 0, cliques: 0, membros: 0 },
-            { nome: "Procuradoria-Geral do Município", cadastros: 0, cliques: 0, membros: 0 },
-            { nome: "Controladoria-Geral do Município", cadastros: 0, cliques: 0, membros: 0 }
+            { nome: "Saúde", cadastros: 0, cliques: 0, membros: 0 }, { nome: "Educação, Cultura e Esporte", cadastros: 0, cliques: 0, membros: 0 }, { nome: "Desenvolvimento Econômico, Turismo e Inovação", cadastros: 0, cliques: 0, membros: 0 }, { nome: "Infraestrutura e Mobilidade", cadastros: 0, cliques: 0, membros: 0 }, { nome: "Assistência Social e Combate à Fome", cadastros: 0, cliques: 0, membros: 0 }, { nome: "Comunicação", cadastros: 0, cliques: 0, membros: 0 }, { nome: "Desenvolvimento Rural", cadastros: 0, cliques: 0, membros: 0 }, { nome: "Serviços Públicos e Defesa Civil", cadastros: 0, cliques: 0, membros: 0 }, { nome: "Governo", cadastros: 0, cliques: 0, membros: 0 }, { nome: "Desenvolvimento Urbano, Habitação e Sustentabilidade", cadastros: 0, cliques: 0, membros: 0 }, { nome: "Casa Civil", cadastros: 0, cliques: 0, membros: 0 }, { nome: "Planejamento, Gestão e Finanças", cadastros: 0, cliques: 0, membros: 0 }, { nome: "Segurança Pública", cadastros: 0, cliques: 0, membros: 0 }, { nome: "Ammpla", cadastros: 0, cliques: 0, membros: 0 }, { nome: "Licitações e Contratos", cadastros: 0, cliques: 0, membros: 0 }, { nome: "Receitas Municipais", cadastros: 0, cliques: 0, membros: 0 }, { nome: "Autarquia 1", cadastros: 0, cliques: 0, membros: 0 }, { nome: "Autarquia 2", cadastros: 0, cliques: 0, membros: 0 }, { nome: "Procuradoria-Geral do Município", cadastros: 0, cliques: 0, membros: 0 }, { nome: "Controladoria-Geral do Município", cadastros: 0, cliques: 0, membros: 0 }
         ];
 
         let dadosSecretarias = [];
@@ -158,70 +181,40 @@
         const podiumContainer = document.getElementById('podium-container');
         const rankingBody = document.getElementById('ranking-body');
         const historicoBody = document.getElementById('historico-body');
+        const printButton = document.getElementById('print-button');
 
-        function saveData() {
-            localStorage.setItem(DATA_KEY, JSON.stringify(dadosSecretarias));
-            localStorage.setItem(HISTORICO_KEY, JSON.stringify(historico));
-        }
-
-        function loadData() {
-            const savedData = localStorage.getItem(DATA_KEY);
-            const savedHistorico = localStorage.getItem(HISTORICO_KEY);
-            
-            dadosSecretarias = savedData ? JSON.parse(savedData) : initialData;
-            historico = savedHistorico ? JSON.parse(savedHistorico) : [];
-        }
-
+        function saveData() { localStorage.setItem(DATA_KEY, JSON.stringify(dadosSecretarias)); localStorage.setItem(HISTORICO_KEY, JSON.stringify(historico)); }
+        function loadData() { const savedData = localStorage.getItem(DATA_KEY); const savedHistorico = localStorage.getItem(HISTORICO_KEY); dadosSecretarias = savedData ? JSON.parse(savedData) : initialData; historico = savedHistorico ? JSON.parse(savedHistorico) : []; }
         function sortAndRank() { dadosSecretarias.sort((a, b) => { if (b.cadastros !== a.cadastros) return b.cadastros - a.cadastros; if (b.cliques !== a.cliques) return b.cliques - a.cliques; return b.membros - a.membros; }); }
         function renderPodium() { podiumContainer.innerHTML = ''; const top3 = dadosSecretarias.slice(0, 3); top3.forEach((secretaria, index) => { const card = document.createElement('div'); card.className = `podium-card podium-card-${index + 1}`; card.innerHTML = `<span class="posicao">${index + 1}º</span><h3>${secretaria.nome}</h3><div class="podium-data"><p>Cadastros: <span>${secretaria.cadastros}</span></p><p>Cliques: <span>${secretaria.cliques}</span></p><p>Membros: <span>${secretaria.membros}</span></p></div>`; podiumContainer.appendChild(card); }); }
         function renderRankingTable() { rankingBody.innerHTML = ''; const restoDoRanking = dadosSecretarias.slice(3); restoDoRanking.forEach((secretaria, index) => { const posicao = index + 4; const linha = document.createElement('tr'); linha.innerHTML = `<td class="pos-cell">${posicao}º</td><td>${secretaria.nome}</td><td>${secretaria.cadastros}</td><td>${secretaria.cliques}</td><td>${secretaria.membros}</td>`; rankingBody.appendChild(linha); }); }
         function renderHistorico() { historicoBody.innerHTML = ''; const logEntries = [...historico].reverse().slice(0, 20); logEntries.forEach(entry => { const dataFormatada = new Date(entry.timestamp).toLocaleString('pt-BR'); const novosDados = `Cad: ${entry.cadastros}, Cliques: ${entry.cliques}, Membros: ${entry.membros}`; const linha = document.createElement('tr'); linha.innerHTML = `<td>${dataFormatada}</td><td>${entry.nome}</td><td>${novosDados}</td>`; historicoBody.appendChild(linha); }); }
-        
-        function updateAllDisplays() {
-            sortAndRank();
-            renderPodium();
-            renderRankingTable();
-            renderHistorico();
-        }
-        
+        function updateAllDisplays() { sortAndRank(); renderPodium(); renderRankingTable(); renderHistorico(); }
         function populateSelect() { const sortedByName = [...dadosSecretarias].sort((a, b) => a.nome.localeCompare(b.nome)); select.innerHTML = ''; sortedByName.forEach(secretaria => { const option = document.createElement('option'); option.value = secretaria.nome; option.textContent = secretaria.nome; select.appendChild(option); }); }
         function fillFormWithSelectedData() { const selectedName = select.value; const secretariaData = dadosSecretarias.find(s => s.nome === selectedName); if (secretariaData) { cadastrosInput.value = secretariaData.cadastros; cliquesInput.value = secretariaData.cliques; membrosInput.value = secretariaData.membros; } }
-
         function handleFormSubmit(event) {
             event.preventDefault();
             const selectedName = select.value;
             const novosDados = { cadastros: parseInt(cadastrosInput.value) || 0, cliques: parseInt(cliquesInput.value) || 0, membros: parseInt(membrosInput.value) || 0 };
-            
             const logEntry = { timestamp: new Date().toISOString(), nome: selectedName, ...novosDados };
             historico.push(logEntry);
-            
             const secretariaIndex = dadosSecretarias.findIndex(s => s.nome === selectedName);
-            if (secretariaIndex > -1) {
-                dadosSecretarias[secretariaIndex] = { ...dadosSecretarias[secretariaIndex], ...novosDados };
-            }
-
+            if (secretariaIndex > -1) { dadosSecretarias[secretariaIndex] = { ...dadosSecretarias[secretariaIndex], ...novosDados }; }
             saveData();
             updateAllDisplays();
             alert(`Dados da secretaria "${selectedName}" foram atualizados e salvos no seu navegador!`);
         }
-
-        function handleReset() {
-            if (confirm('Tem certeza de que deseja apagar todos os dados salvos e restaurar os valores originais?')) {
-                localStorage.removeItem(DATA_KEY);
-                localStorage.removeItem(HISTORICO_KEY);
-                location.reload();
-            }
-        }
+        function handleReset() { if (confirm('Tem certeza de que deseja apagar todos os dados salvos e restaurar os valores originais?')) { localStorage.removeItem(DATA_KEY); localStorage.removeItem(HISTORICO_KEY); location.reload(); } }
 
         window.onload = () => {
             loadData();
             updateAllDisplays();
             populateSelect();
             fillFormWithSelectedData();
-
             form.addEventListener('submit', handleFormSubmit);
             resetButton.addEventListener('click', handleReset);
             select.addEventListener('change', fillFormWithSelectedData);
+            printButton.addEventListener('click', () => { window.print(); });
         };
     </script>
 </body>
