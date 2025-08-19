@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard com Firebase e Histórico - Corrida Digital</title>
+    <title>Dashboard Autônomo com Histórico - Corrida Digital</title>
     <style>
-        /* O CSS continua o mesmo, sem grandes alterações */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
         :root { --cor-fundo: #0f1018; --cor-card: #1c1d2b; --cor-card-secundario: #212232; --cor-texto-principal: #ffffff; --cor-texto-secundario: #a7a7a7; --cor-amarelo: #f9c74f; --cor-azul: #4a90e2; --cor-vermelho: #e74c3c; }
         body { background-color: var(--cor-fundo); color: var(--cor-texto-principal); font-family: 'Poppins', sans-serif; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        h1, h2, h3 { text-align: center; }
-        h1 { color: var(--cor-amarelo); font-size: 2.5em; letter-spacing: 2px; margin-bottom: 0; }
-        h2 { font-size: 1.8em; margin-top: 5px; }
+        .header-logo { font-size: 2.8em; font-weight: 700; color: var(--cor-amarelo); letter-spacing: 2px; text-align: center; margin-bottom: 0; }
+        .header-subtitle { font-size: 1.8em; font-weight: 600; text-align: center; margin-top: 5px; margin-bottom: 20px; }
+        h2, h3 { text-align: center; }
+        h2 { font-size: 1.8em; }
         .update-container { background-color: var(--cor-card); border-radius: 10px; padding: 25px; margin-top: 30px; width: 100%; max-width: 800px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); }
         .update-container h3 { margin-top: 0; color: var(--cor-amarelo); }
         #update-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; align-items: flex-end; }
@@ -20,9 +20,9 @@
         .form-group select, .form-group input { background-color: var(--cor-card-secundario); color: var(--cor-texto-principal); border: 1px solid #444; border-radius: 5px; padding: 10px; font-family: 'Poppins', sans-serif; font-size: 1em; }
         #update-button { background-color: var(--cor-azul); color: var(--cor-texto-principal); border: none; border-radius: 5px; padding: 12px; font-weight: 600; cursor: pointer; transition: background-color 0.3s ease; height: 45px; }
         #update-button:hover { background-color: #357abd; }
-        #reset-button { background-color: transparent; border: 1px solid var(--cor-vermelho); color: var(--cor-vermelho); transition: background-color 0.3s, color 0.3s; }
+        #reset-button { background-color: transparent; border: 1px solid var(--cor-vermelho); color: var(--cor-vermelho); transition: background-color 0.3s, color 0.3s; padding: 12px; font-weight: 600; cursor: pointer; height: 45px; border-radius: 5px; }
         #reset-button:hover { background-color: var(--cor-vermelho); color: var(--cor-texto-principal); }
-        .podium-container { display: flex; justify-content: center; align-items: flex-end; gap: 20px; flex-wrap: wrap; width: 100%; max-width: 1200px; margin-top: 40px; }
+        .podium-container { display: flex; justify-content: center; align-items: flex-end; gap: 20px; flex-wrap: wrap; width: 100%; max-width: 1200px; margin-top: 40px; min-height: 300px; }
         .podium-card { background-color: var(--cor-card); border: 2px solid transparent; border-radius: 10px; padding: 25px; text-align: center; width: 280px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); transition: transform 0.3s ease, border-color 0.3s ease; }
         .podium-card:hover { transform: translateY(-10px); }
         .podium-card h3 { margin: 0; font-size: 1.2em; color: var(--cor-texto-principal); height: 40px; }
@@ -44,16 +44,38 @@
         .ranking-table tbody tr:last-child { border-bottom: none; }
         .ranking-table tbody tr:nth-child(even) { background-color: var(--cor-card-secundario); }
         .ranking-table .pos-cell { font-weight: 700; color: var(--cor-amarelo); text-align: center; }
+        .footer { width: 100%; padding: 40px 20px; text-align: center; margin-top: 60px; border-top: 1px solid #2a2c3d; }
+        .footer-copyright { font-size: 0.9em; color: var(--cor-texto-secundario); margin: 0; }
     </style>
 </head>
 <body>
     <header>
-        <h1>SIMÃO NA REDE DIGITAL</h1>
-        <h2>CORRIDA DIGITAL</h2>
+        <h1 class="header-logo">SIMÃO NA REDE DIGITAL</h1>
+        <h2 class="header-subtitle">CORRIDA DIGITAL</h2>
     </header>
 
     <section class="update-container">
-        <!-- O formulário continua o mesmo -->
+        <h3>Área de Atualização de Dados</h3>
+        <form id="update-form" onsubmit="return false;">
+            <div class="form-group" style="grid-column: 1 / -1;">
+                <label for="secretaria-select">Selecione a Secretaria</label>
+                <select id="secretaria-select"></select>
+            </div>
+            <div class="form-group">
+                <label for="cadastros-input">Cadastros</label>
+                <input type="number" id="cadastros-input" min="0" required>
+            </div>
+            <div class="form-group">
+                <label for="cliques-input">Cliques</label>
+                <input type="number" id="cliques-input" min="0" required>
+            </div>
+            <div class="form-group">
+                <label for="membros-input">Membros</label>
+                <input type="number" id="membros-input" min="0" required>
+            </div>
+            <button type="submit" id="update-button">Atualizar Ranking</button>
+            <button type="button" id="reset-button">Restaurar Originais</button>
+        </form>
     </section>
 
     <main>
@@ -65,11 +87,19 @@
         <section class="ranking-container">
             <h2>Ranking Geral</h2>
             <table class="ranking-table">
-                <!-- Tabela de Ranking -->
+                <thead>
+                    <tr>
+                        <th style="width: 10%; text-align: center;">Pos.</th>
+                        <th style="width: 50%;">Secretaria</th>
+                        <th style="width: 15%;">Cadastros</th>
+                        <th style="width: 15%;">Cliques</th>
+                        <th style="width: 15%;">Membros</th>
+                    </tr>
+                </thead>
+                <tbody id="ranking-body"></tbody>
             </table>
         </section>
 
-        <!-- NOVA SEÇÃO DE HISTÓRICO -->
         <section class="ranking-container">
             <h2>Histórico de Atualizações</h2>
             <table class="ranking-table">
@@ -80,153 +110,118 @@
                         <th style="width: 40%;">Novos Dados</th>
                     </tr>
                 </thead>
-                <tbody id="historico-body">
-                    <!-- O histórico será preenchido aqui -->
-                </tbody>
+                <tbody id="historico-body"></tbody>
             </table>
         </section>
     </main>
-
-    <!-- Adicione os scripts do Firebase aqui -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    
+    <footer class="footer">
+        <p class="footer-copyright">© 2025 Prefeitura de Petrolina – Secretaria de Comunicação</p>
+    </footer>
 
     <script>
-        // =================================================================
-        // COLE A CONFIGURAÇÃO DO SEU FIREBASE AQUI
-        // =================================================================
-        const firebaseConfig = {
-            apiKey: "AIzaSy...SUA-API-KEY",
-            authDomain: "seu-projeto.firebaseapp.com",
-            databaseURL: "https://seu-projeto-default-rtdb.firebaseio.com",
-            projectId: "seu-projeto",
-            storageBucket: "seu-projeto.appspot.com",
-            messagingSenderId: "SEU-ID",
-            appId: "SEU-APP-ID"
-        };
+        const DATA_KEY = 'dashboard_data_secretarias';
+        const HISTORICO_KEY = 'dashboard_historico_secretarias';
 
-        // INICIALIZAR FIREBASE
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-        const dataRef = database.ref('secretarias');
-        const historicoRef = database.ref('historico');
-
-        // DADOS INICIAIS (usados apenas se o banco de dados estiver vazio)
         const initialData = [
             { nome: "Saúde", cadastros: 0, cliques: 0, membros: 0 },
             { nome: "Educação, Cultura e Esporte", cadastros: 0, cliques: 0, membros: 0 },
             { nome: "Desenvolvimento Econômico, Turismo e Inovação", cadastros: 0, cliques: 0, membros: 0 },
-            // ... (adicione todas as outras secretarias com valores zerados) ...
+            { nome: "Infraestrutura e Mobilidade", cadastros: 0, cliques: 0, membros: 0 },
+            { nome: "Assistência Social e Combate à Fome", cadastros: 0, cliques: 0, membros: 0 },
+            { nome: "Comunicação", cadastros: 0, cliques: 0, membros: 0 },
+            { nome: "Desenvolvimento Rural", cadastros: 0, cliques: 0, membros: 0 },
+            { nome: "Serviços Públicos e Defesa Civil", cadastros: 0, cliques: 0, membros: 0 },
+            { nome: "Governo", cadastros: 0, cliques: 0, membros: 0 },
+            { nome: "Desenvolvimento Urbano, Habitação e Sustentabilidade", cadastros: 0, cliques: 0, membros: 0 },
+            { nome: "Casa Civil", cadastros: 0, cliques: 0, membros: 0 },
+            { nome: "Planejamento, Gestão e Finanças", cadastros: 0, cliques: 0, membros: 0 },
+            { nome: "Segurança Pública", cadastros: 0, cliques: 0, membros: 0 },
+            { nome: "Ammpla", cadastros: 0, cliques: 0, membros: 0 },
+            { nome: "Licitações e Contratos", cadastros: 0, cliques: 0, membros: 0 },
+            { nome: "Receitas Municipais", cadastros: 0, cliques: 0, membros: 0 },
+            { nome: "Autarquia 1", cadastros: 0, cliques: 0, membros: 0 },
+            { nome: "Autarquia 2", cadastros: 0, cliques: 0, membros: 0 },
+            { nome: "Procuradoria-Geral do Município", cadastros: 0, cliques: 0, membros: 0 },
             { nome: "Controladoria-Geral do Município", cadastros: 0, cliques: 0, membros: 0 }
         ];
 
         let dadosSecretarias = [];
+        let historico = [];
 
-        // Elementos do DOM, incluindo o corpo da tabela de histórico
         const form = document.getElementById('update-form');
+        const select = document.getElementById('secretaria-select');
+        const cadastrosInput = document.getElementById('cadastros-input');
+        const cliquesInput = document.getElementById('cliques-input');
+        const membrosInput = document.getElementById('membros-input');
+        const resetButton = document.getElementById('reset-button');
+        const podiumContainer = document.getElementById('podium-container');
+        const rankingBody = document.getElementById('ranking-body');
         const historicoBody = document.getElementById('historico-body');
-        // ... (outros elementos do DOM)
 
-        // Funções de renderização do ranking (iguais às anteriores)
-        function sortAndRank() { /* ... */ }
-        function renderPodium() { /* ... */ }
-        function renderRankingTable() { /* ... */ }
-        function updateDisplay() {
+        function saveData() {
+            localStorage.setItem(DATA_KEY, JSON.stringify(dadosSecretarias));
+            localStorage.setItem(HISTORICO_KEY, JSON.stringify(historico));
+        }
+
+        function loadData() {
+            const savedData = localStorage.getItem(DATA_KEY);
+            const savedHistorico = localStorage.getItem(HISTORICO_KEY);
+            
+            dadosSecretarias = savedData ? JSON.parse(savedData) : initialData;
+            historico = savedHistorico ? JSON.parse(savedHistorico) : [];
+        }
+
+        function sortAndRank() { dadosSecretarias.sort((a, b) => { if (b.cadastros !== a.cadastros) return b.cadastros - a.cadastros; if (b.cliques !== a.cliques) return b.cliques - a.cliques; return b.membros - a.membros; }); }
+        function renderPodium() { podiumContainer.innerHTML = ''; const top3 = dadosSecretarias.slice(0, 3); top3.forEach((secretaria, index) => { const card = document.createElement('div'); card.className = `podium-card podium-card-${index + 1}`; card.innerHTML = `<span class="posicao">${index + 1}º</span><h3>${secretaria.nome}</h3><div class="podium-data"><p>Cadastros: <span>${secretaria.cadastros}</span></p><p>Cliques: <span>${secretaria.cliques}</span></p><p>Membros: <span>${secretaria.membros}</span></p></div>`; podiumContainer.appendChild(card); }); }
+        function renderRankingTable() { rankingBody.innerHTML = ''; const restoDoRanking = dadosSecretarias.slice(3); restoDoRanking.forEach((secretaria, index) => { const posicao = index + 4; const linha = document.createElement('tr'); linha.innerHTML = `<td class="pos-cell">${posicao}º</td><td>${secretaria.nome}</td><td>${secretaria.cadastros}</td><td>${secretaria.cliques}</td><td>${secretaria.membros}</td>`; rankingBody.appendChild(linha); }); }
+        function renderHistorico() { historicoBody.innerHTML = ''; const logEntries = [...historico].reverse().slice(0, 20); logEntries.forEach(entry => { const dataFormatada = new Date(entry.timestamp).toLocaleString('pt-BR'); const novosDados = `Cad: ${entry.cadastros}, Cliques: ${entry.cliques}, Membros: ${entry.membros}`; const linha = document.createElement('tr'); linha.innerHTML = `<td>${dataFormatada}</td><td>${entry.nome}</td><td>${novosDados}</td>`; historicoBody.appendChild(linha); }); }
+        
+        function updateAllDisplays() {
             sortAndRank();
             renderPodium();
             renderRankingTable();
+            renderHistorico();
         }
         
-        // NOVA FUNÇÃO PARA RENDERIZAR O HISTÓRICO
-        function renderHistorico(historico) {
-            historicoBody.innerHTML = '';
-            if (!historico) return;
+        function populateSelect() { const sortedByName = [...dadosSecretarias].sort((a, b) => a.nome.localeCompare(b.nome)); select.innerHTML = ''; sortedByName.forEach(secretaria => { const option = document.createElement('option'); option.value = secretaria.nome; option.textContent = secretaria.nome; select.appendChild(option); }); }
+        function fillFormWithSelectedData() { const selectedName = select.value; const secretariaData = dadosSecretarias.find(s => s.nome === selectedName); if (secretariaData) { cadastrosInput.value = secretariaData.cadastros; cliquesInput.value = secretariaData.cliques; membrosInput.value = secretariaData.membros; } }
 
-            // Pega as chaves, inverte para mostrar o mais novo primeiro, e limita a 20 entradas
-            const logEntries = Object.values(historico).reverse().slice(0, 20);
-
-            logEntries.forEach(entry => {
-                const dataFormatada = new Date(entry.timestamp).toLocaleString('pt-BR');
-                const novosDados = `Cadastros: ${entry.cadastros}, Cliques: ${entry.cliques}, Membros: ${entry.membros}`;
-                const linha = document.createElement('tr');
-                linha.innerHTML = `
-                    <td>${dataFormatada}</td>
-                    <td>${entry.nome}</td>
-                    <td>${novosDados}</td>
-                `;
-                historicoBody.appendChild(linha);
-            });
-        }
-        
-        async function handleFormSubmit() {
+        function handleFormSubmit(event) {
+            event.preventDefault();
             const selectedName = select.value;
-            const secretariaIndex = dadosSecretarias.findIndex(s => s.nome === selectedName);
+            const novosDados = { cadastros: parseInt(cadastrosInput.value) || 0, cliques: parseInt(cliquesInput.value) || 0, membros: parseInt(membrosInput.value) || 0 };
             
+            const logEntry = { timestamp: new Date().toISOString(), nome: selectedName, ...novosDados };
+            historico.push(logEntry);
+            
+            const secretariaIndex = dadosSecretarias.findIndex(s => s.nome === selectedName);
             if (secretariaIndex > -1) {
-                // Prepara os novos dados
-                const novosDados = {
-                    cadastros: parseInt(cadastrosInput.value) || 0,
-                    cliques: parseInt(cliquesInput.value) || 0,
-                    membros: parseInt(membrosInput.value) || 0
-                };
-
-                // Atualiza a lista local
                 dadosSecretarias[secretariaIndex] = { ...dadosSecretarias[secretariaIndex], ...novosDados };
+            }
 
-                // Prepara o registro do histórico
-                const logEntry = {
-                    timestamp: new Date().toISOString(),
-                    nome: selectedName,
-                    ...novosDados
-                };
+            saveData();
+            updateAllDisplays();
+            alert(`Dados da secretaria "${selectedName}" foram atualizados e salvos no seu navegador!`);
+        }
 
-                try {
-                    // Salva a lista inteira de secretarias E adiciona um novo registro no histórico
-                    await dataRef.set(dadosSecretarias);
-                    await historicoRef.push(logEntry);
-                    
-                    alert(`Dados da secretaria "${selectedName}" foram atualizados!`);
-                } catch (error) {
-                    console.error("Erro ao salvar no Firebase: ", error);
-                    alert("Ocorreu um erro ao salvar os dados.");
-                }
+        function handleReset() {
+            if (confirm('Tem certeza de que deseja apagar todos os dados salvos e restaurar os valores originais?')) {
+                localStorage.removeItem(DATA_KEY);
+                localStorage.removeItem(HISTORICO_KEY);
+                location.reload();
             }
         }
 
-        async function handleReset() {
-            if (confirm('Tem certeza de que deseja ZERAR TODOS os dados? Esta ação não pode ser desfeita.')) {
-                try {
-                    await dataRef.set(initialData);
-                    await historicoRef.remove(); // Limpa o histórico também
-                    alert('Todos os dados foram restaurados para o estado inicial.');
-                } catch (error) {
-                    console.error("Erro ao resetar: ", error);
-                }
-            }
-        }
-
-        // INICIALIZAÇÃO
         window.onload = () => {
-            // ... (event listeners para o formulário)
+            loadData();
+            updateAllDisplays();
+            populateSelect();
+            fillFormWithSelectedData();
 
-            // Ouve por mudanças nos dados das secretarias
-            dataRef.on('value', (snapshot) => {
-                const data = snapshot.val();
-                if (data) {
-                    dadosSecretarias = data;
-                } else {
-                    dadosSecretarias = initialData;
-                    dataRef.set(initialData); // Salva os dados iniciais se o banco estiver vazio
-                }
-                updateDisplay();
-                // ... (código para popular o select e preencher o form)
-            });
-
-            // Ouve por mudanças nos dados do histórico
-            historicoRef.on('value', (snapshot) => {
-                const logData = snapshot.val();
-                renderHistorico(logData);
-            });
+            form.addEventListener('submit', handleFormSubmit);
+            resetButton.addEventListener('click', handleReset);
+            select.addEventListener('change', fillFormWithSelectedData);
         };
     </script>
 </body>
